@@ -24,7 +24,7 @@ export default function Home() {
         />
         <meta
           property="og:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/4c065e43-875f-49ed-e52f-ba0726b65a00/public"
+          content="https://infinitememe.lol/INFINITE-MEMES.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -37,7 +37,7 @@ export default function Home() {
         />
         <meta
           name="twitter:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/4c065e43-875f-49ed-e52f-ba0726b65a00/public"
+          content="https://infinitememe.lol/INFINITE-MEMES.png"
         />
         <meta property="og:url" content="https://infinitememe.lol/" />
       </Head>
