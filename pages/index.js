@@ -8,45 +8,43 @@ export default function Home() {
       <Head>
         <link rel="icon" href="favicon.ico" sizes="32x32" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <title>Based Memecoin Race</title>
+        <title>Infinite Memes Generator</title>
         <meta
           name="description"
-          content="Find the best Farcaster memes with AI, share them and fucking win."
+          content="Generate infinite memes with AI"
         />
         <meta
           property="og:title"
-          content="Based Memecoin Race - Who's the leading memecoin on Base ?"
+          content="Infinite Memes Generator"
         />
         <meta
           property="og:description"
-          content="Find out who's leading the memecoin race on Base."
+          content="Generate infinite memes with AI"
         />
         <meta
           property="og:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/1a917650-08d5-4635-3b09-ed82bf64f300/public"
+          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/7d63f9ec-96ff-423f-9dcb-60967ab37b00/public"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Based Memecoin Race - Who's the leading memecoin on Base ?"
+          content="Infinite Memes Generator"
         />
         <meta
           name="twitter:description"
-          content="Find out who's leading the memecoin race on Base."
+          content="Generate infinite memes with AI"
         />
         <meta
           name="twitter:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/1a917650-08d5-4635-3b09-ed82bf64f300/public"
+          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/7d63f9ec-96ff-423f-9dcb-60967ab37b00/public"
         />
-        <meta property="og:url" content="https://basedrace.fun/" />
+        <meta property="og:url" content="https://infinitememe.lol/" />
       </Head>
-      <body>
         <div className="flex flex-col items-center justify-center min-h-screen bg-white">
           <h1 className="text-4xl font-bold mb-8">AI Meme Generator</h1>
           <SearchBar />
           <Analytics />
         </div>
-      </body>
     </>
   );
 }
