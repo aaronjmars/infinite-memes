@@ -23,7 +23,7 @@ export default function Home() {
         />
         <meta
           property="og:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/7d63f9ec-96ff-423f-9dcb-60967ab37b00/public"
+          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/4c065e43-875f-49ed-e52f-ba0726b65a00/public"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -36,7 +36,7 @@ export default function Home() {
         />
         <meta
           name="twitter:image"
-          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/7d63f9ec-96ff-423f-9dcb-60967ab37b00/public"
+          content="https://imagedelivery.net/uzmvUOBJ09s_IX7VWocbxw/4c065e43-875f-49ed-e52f-ba0726b65a00/public"
         />
         <meta property="og:url" content="https://infinitememe.lol/" />
       </Head>
