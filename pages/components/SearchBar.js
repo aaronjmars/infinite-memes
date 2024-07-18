@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-export const maxDuration = 60; 
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');

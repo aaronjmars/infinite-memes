@@ -1,5 +1,4 @@
 import SearchBar from './components/SearchBar';
-export const maxDuration = 60; 
 
 export default function Home() {
   return (
