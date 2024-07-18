@@ -13,6 +13,7 @@ export default function Home() {
           name="description"
           content="Generate infinite memes with AI"
         />
+        <meta property="og:type" content="website" />
         <meta
           property="og:title"
           content="Infinite Memes Generator"
