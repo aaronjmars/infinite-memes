@@ -1,4 +1,5 @@
 import ids from '../imageGeneratorIDs.json';
+export const maxDuration = 60; 
 const apiToken = process.env.GLIF_API_KEY;
 const apiUrl = 'https://simple-api.glif.app';
 
