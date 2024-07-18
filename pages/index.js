@@ -8,7 +8,7 @@ export default function Home() {
       <Head>
         <link rel="icon" href="favicon.ico" sizes="32x32" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <title>Infinite Memes Generator</title>
+        <title>Infinite Meme Generator</title>
         <meta
           name="description"
           content="Generate infinite memes with AI"
@@ -16,7 +16,7 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Infinite Memes Generator"
+          content="Infinite Meme Generator"
         />
         <meta
           property="og:description"
@@ -29,7 +29,7 @@ export default function Home() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Infinite Memes Generator"
+          content="Infinite Meme Generator"
         />
         <meta
           name="twitter:description"
