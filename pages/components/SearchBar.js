@@ -67,7 +67,6 @@ export default function SearchBar() {
             onBlur={() => setIsFocused(false)}
             className="flex-grow focus:outline-none text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 text-gray-800"
             placeholder="What's the meme about ?"
-            disabled={isLoading}
           />
           <button 
             type="submit" 

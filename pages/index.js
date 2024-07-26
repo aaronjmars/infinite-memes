@@ -56,7 +56,7 @@ export default function Home() {
       <div className="flex flex-col items-center justify-between min-h-screen bg-white">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 text-center px-4">
-        Infinite Memes Generator</h1>
+        Infinite Memes Generator ✨</h1>
           <SearchBar />
         </div>
         <Footer />

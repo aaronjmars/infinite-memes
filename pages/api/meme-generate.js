@@ -14,7 +14,7 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Search query is required' });
         }
   
-        const requests = ids.ids.slice(0, 10).map(id => fetch(apiUrl, {
+        const requests = ids.ids.slice(0, 15).map(id => fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${apiToken}`,
@@ -28,9 +28,7 @@ export default async function handler(req, res) {
   
         const responses = await Promise.all(requests);
         const results = await Promise.all(responses.map(response => response.json()));
-  
-        console.log('API Response:', results);
-  
+    
         res.status(200).json(results);
       } catch (error) {
         console.error('Search API error:', error);
