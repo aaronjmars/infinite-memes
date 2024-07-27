@@ -52,7 +52,7 @@ export default function Home() {
         <meta name="twitter:player" content="https://infinitememes.lol/" />
 
         <meta name="twitter:player:width" content="360" />
-        <meta name="twitter:player:height" content="900" />
+        <meta name="twitter:player:height" content="560" />
         <meta
           name="twitter:image"
           content="https://infinitememes.lol/INFINITE-MEMES.png"

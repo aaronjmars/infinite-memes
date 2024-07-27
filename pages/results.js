@@ -8,11 +8,10 @@ export default function Results() {
   const { imageUrls } = router.query;
 
   const [shuffledUrls, setShuffledUrls] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [zoomedImage, setZoomedImage] = useState(null);
   const [isInIframe, setIsInIframe] = useState(false);
 
   useEffect(() => {
-    // Check if the component is rendered inside an iframe
     setIsInIframe(window.self !== window.top);
     if (imageUrls) {
       const parsed = JSON.parse(imageUrls);
@@ -21,25 +20,15 @@ export default function Results() {
   }, [imageUrls]);
 
   const handleImageClick = (url) => {
-    if (isInIframe) {
-      // Open image in a new tab when in an iframe
-      window.open(url, "_blank");
-    } else {
-      // Open fullscreen view when not in an iframe
-      setSelectedImage(url);
-    }
+    setZoomedImage(url);
   };
 
-  const closeFullscreen = () => {
-    setSelectedImage(null);
+  const closeZoom = () => {
+    setZoomedImage(null);
   };
 
   return (
-    <div
-      className={`${styles.container} ${
-        isInIframe ? styles.iframeContainer : ""
-      }`}
-    >
+    <div className={`${styles.container} ${isInIframe ? styles.iframeContainer : ""}`}>
       {!isInIframe && (
         <div className="mt-8 text-center">
           <Link href="/" className={styles.generateButton}>
@@ -49,26 +38,18 @@ export default function Results() {
       )}
       <div className="container mx-auto px-4 py-8">
         {shuffledUrls.length > 0 ? (
-          <div
-            className={`${styles.imageGrid} ${
-              isInIframe ? styles.iframeImageGrid : ""
-            }`}
-          >
+          <div className={`${styles.imageGrid} ${isInIframe ? styles.iframeImageGrid : ""}`}>
             {shuffledUrls.map((url, index) => (
               <div
                 key={index}
-                className={`${styles.imageContainer} ${
-                  isInIframe ? styles.iframeImageContainer : ""
-                }`}
+                className={`${styles.imageContainer} ${isInIframe ? styles.iframeImageContainer : ""}`}
                 onClick={() => handleImageClick(url)}
               >
                 <div className={styles.imageWrapper}>
                   <img
                     src={url}
                     alt={`Generated image ${index + 1}`}
-                    className={`${styles.image} ${
-                      isInIframe ? styles.iframeImage : ""
-                    }`}
+                    className={`${styles.image} ${isInIframe ? styles.iframeImage : ""}`}
                   />
                 </div>
               </div>
@@ -79,13 +60,13 @@ export default function Results() {
         )}
       </div>
 
-      {selectedImage && !isInIframe && (
-        <div className={styles.fullscreenOverlay} onClick={closeFullscreen}>
-          <div className="max-w-4xl max-h-full p-4">
+      {zoomedImage && (
+        <div className={styles.zoomOverlay} onClick={closeZoom}>
+          <div className={styles.zoomImageContainer}>
             <img
-              src={selectedImage}
-              alt="Full-size image"
-              className={styles.fullscreenImage}
+              src={zoomedImage}
+              alt="Zoomed image"
+              className={styles.zoomImage}
             />
           </div>
         </div>
