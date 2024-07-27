@@ -43,7 +43,7 @@ export default function Home() {
         />
         <meta name="twitter:card" content="player" />
         <meta name="twitter:site" content="@leo5imon" />
-        <meta name="twitter:title" content="Infinite Meme Generator" />
+        <meta name="twitter:title" content="Infinite Memes Generator" />
         <meta
           name="twitter:description"
           content="Generate infinite memes with AI"
