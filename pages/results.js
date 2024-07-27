@@ -20,8 +20,12 @@ export default function Results() {
     }
   }, [imageUrls]);
 
-  const openFullscreen = (url) => {
-    if (!isInIframe) {
+  const handleImageClick = (url) => {
+    if (isInIframe) {
+      // Open image in a new tab when in an iframe
+      window.open(url, "_blank");
+    } else {
+      // Open fullscreen view when not in an iframe
       setSelectedImage(url);
     }
   };
@@ -56,9 +60,8 @@ export default function Results() {
                 className={`${styles.imageContainer} ${
                   isInIframe ? styles.iframeImageContainer : ""
                 }`}
-                onClick={() => openFullscreen(url)}
+                onClick={() => handleImageClick(url)}
               >
-                {/* This wrapper creates the gradient border effect on hover */}
                 <div className={styles.imageWrapper}>
                   <img
                     src={url}
