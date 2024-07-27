@@ -50,14 +50,10 @@
   
   .imageWrapper {
     position: relative;
-    padding: 0.125rem;
-    background-color: white;
-    transition: background-color 0.3s;
-    border-radius: 0.5rem;
-  }
-  
-  .imageWrapper:hover {
+    padding: 2px;
     background-color: transparent;
+    border-radius: 0.5rem;
+    overflow: hidden;
   }
   
   .imageWrapper::before {
@@ -67,7 +63,7 @@
     background-image: linear-gradient(to right, #8b5cf6, #3b82f6, #06b6d4);
     opacity: 0;
     transition: opacity 0.3s;
-    border-radius: 0.5rem;
+    z-index: 1;
   }
   
   .imageWrapper:hover::before {
@@ -79,6 +75,9 @@
     height: 100%;
     object-fit: contain;
     border-radius: 0.5rem;
+    position: relative;
+    z-index: 2;
+    background-color: white;
   }
   
   .fullscreenOverlay {

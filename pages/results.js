@@ -12,6 +12,7 @@ export default function Results() {
   const [isInIframe, setIsInIframe] = useState(false);
 
   useEffect(() => {
+    // Check if the component is rendered inside an iframe
     setIsInIframe(window.self !== window.top);
     if (imageUrls) {
       const parsed = JSON.parse(imageUrls);
@@ -57,6 +58,7 @@ export default function Results() {
                 }`}
                 onClick={() => openFullscreen(url)}
               >
+                {/* This wrapper creates the gradient border effect on hover */}
                 <div className={styles.imageWrapper}>
                   <img
                     src={url}
