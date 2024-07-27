@@ -41,12 +41,18 @@ export default function Home() {
           property="og:image"
           content="https://infinitememes.lol/INFINITE-MEMES.png"
         />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="player" />
+        <meta name="twitter:site" content="@leo5imon" />
         <meta name="twitter:title" content="Infinite Meme Generator" />
         <meta
           name="twitter:description"
           content="Generate infinite memes with AI"
         />
+
+        <meta name="twitter:player" content="https://infinitememes.lol/" />
+
+        <meta name="twitter:player:width" content="360" />
+        <meta name="twitter:player:height" content="560" />
         <meta
           name="twitter:image"
           content="https://infinitememes.lol/INFINITE-MEMES.png"
@@ -55,8 +61,9 @@ export default function Home() {
       </Head>
       <div className="flex flex-col items-center justify-between min-h-screen bg-white">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 text-center px-4">
-        Infinite Memes Generator ✨</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 text-center px-4">
+            Infinite Memes Generator ✨
+          </h1>
           <SearchBar />
         </div>
         <Footer />
