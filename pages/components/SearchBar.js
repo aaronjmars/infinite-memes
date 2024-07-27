@@ -45,7 +45,7 @@ export default function SearchBar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-lg px-4 sm:px-0">
+    <form onSubmit={handleSearch} action="" className="w-full max-w-lg px-4 sm:px-0">
       <div className={`
         p-0.5 sm:p-1 rounded-full
         ${isFocused 
