@@ -142,3 +142,22 @@
 .iframeContainer .zoomOverlay {
   position: absolute;
 }
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1f2937;
+  }
+
+  .image {
+    background-color: #374151;
+  }
+
+  .generateButton {
+    background-image: linear-gradient(to right, #0e7490, #1d4ed8, #7c3aed);
+  }
+
+  .generateButton:hover {
+    background-image: linear-gradient(to right, #0e7490, #1e40af, #6d28d9);
+  }
+}

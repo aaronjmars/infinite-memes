@@ -28,7 +28,11 @@ export default function Results() {
   };
 
   return (
-    <div className={`${styles.container} ${isInIframe ? styles.iframeContainer : ""}`}>
+    <div
+      className={`${styles.container} ${
+        isInIframe ? styles.iframeContainer : ""
+      }`}
+    >
       {!isInIframe && (
         <div className="mt-8 text-center">
           <Link href="/" className={styles.generateButton}>
@@ -38,25 +42,35 @@ export default function Results() {
       )}
       <div className="container mx-auto px-4 py-8">
         {shuffledUrls.length > 0 ? (
-          <div className={`${styles.imageGrid} ${isInIframe ? styles.iframeImageGrid : ""}`}>
+          <div
+            className={`${styles.imageGrid} ${
+              isInIframe ? styles.iframeImageGrid : ""
+            }`}
+          >
             {shuffledUrls.map((url, index) => (
               <div
                 key={index}
-                className={`${styles.imageContainer} ${isInIframe ? styles.iframeImageContainer : ""}`}
+                className={`${styles.imageContainer} ${
+                  isInIframe ? styles.iframeImageContainer : ""
+                }`}
                 onClick={() => handleImageClick(url)}
               >
                 <div className={styles.imageWrapper}>
                   <img
                     src={url}
                     alt={`Generated image ${index + 1}`}
-                    className={`${styles.image} ${isInIframe ? styles.iframeImage : ""}`}
+                    className={`${styles.image} ${
+                      isInIframe ? styles.iframeImage : ""
+                    }`}
                   />
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-center">No images generated. Please try again.</p>
+          <p className="text-center text-gray-700 dark:text-gray-300">
+            No images generated. Please try again.
+          </p>
         )}
       </div>
 

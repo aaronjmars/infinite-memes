@@ -1,0 +1,23 @@
+.footer {
+  @apply bg-gray-100 dark:bg-gray-800 py-4;
+}
+
+.container {
+  @apply container mx-auto px-4;
+}
+
+.content {
+  @apply flex justify-center items-center;
+}
+
+.text {
+  @apply text-sm text-gray-600 dark:text-gray-300 mr-2;
+}
+
+.link {
+  @apply hover:underline text-blue-600 dark:text-blue-400;
+}
+
+.logo {
+  @apply w-20 mr-1;
+}
