@@ -2,6 +2,7 @@ import Head from "next/head";
 import SearchBar from "./components/SearchBar";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import styles from "./index.module.css";
 
 export default function Home() {
   return (
@@ -59,11 +60,9 @@ export default function Home() {
         />
         <meta property="og:url" content="https://infinitememes.lol/" />
       </Head>
-      <div className="flex flex-col items-center justify-between min-h-screen bg-white">
-        <div className="flex-grow flex flex-col items-center justify-center w-full">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 text-center px-4">
-            Infinite Memes Generator ✨
-          </h1>
+      <div className={styles.container}>
+        <div className={styles.main}>
+          <h1 className={styles.title}>Infinite Memes Generator ✨</h1>
           <SearchBar />
         </div>
         <Footer />
