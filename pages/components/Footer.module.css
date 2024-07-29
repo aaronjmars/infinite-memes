@@ -2,8 +2,8 @@
   @apply bg-gray-100 dark:bg-gray-800 py-4;
 }
 
-.container {
-  @apply container mx-auto px-4;
+.innerContainer {
+  @apply mx-auto px-4 max-w-7xl;
 }
 
 .content {
