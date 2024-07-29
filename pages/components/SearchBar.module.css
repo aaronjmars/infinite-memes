@@ -1,0 +1,35 @@
+.container {
+  @apply w-full max-w-lg px-4 sm:px-0;
+}
+
+.searchWrapper {
+  @apply p-0.5 sm:p-1 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.searchWrapperFocused {
+  @apply bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500;
+}
+
+.searchWrapperBlurred {
+  @apply bg-gray-300 dark:bg-gray-700;
+}
+
+.inputWrapper {
+  @apply flex items-center bg-white dark:bg-gray-800 rounded-full p-1 sm:p-2;
+}
+
+.input {
+  @apply flex-grow focus:outline-none text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 text-gray-800 dark:text-gray-200 bg-transparent;
+}
+
+.button {
+  @apply ml-2 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-white text-xs sm:text-sm transition-all duration-300 ease-in-out;
+}
+
+.buttonEnabled {
+  @apply bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 hover:from-cyan-600 hover:via-blue-600 hover:to-purple-600;
+}
+
+.buttonDisabled {
+  @apply bg-gray-400 dark:bg-gray-600 cursor-not-allowed;
+}
