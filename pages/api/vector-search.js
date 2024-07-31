@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         });
       }
 
-      const index = pinecone.Index("memes-vector");
+      const index = pinecone.Index("vector-memes");
 
       const embeddingResponse = await openai.embeddings.create({
         model: "text-embedding-3-small",

@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         });
       }
 
-      const index = pinecone.Index("memes-vector");
+      const index = pinecone.Index("vector-memes");
 
       const embeddingResponse = await openai.embeddings.create({
         model: "text-embedding-3-small",
@@ -43,12 +43,10 @@ export default async function handler(req, res) {
       res.status(200).json({ message: "Vectors stored successfully" });
     } catch (error) {
       console.error("Vector store error:", error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while storing vectors",
-          details: error.message,
-        });
+      res.status(500).json({
+        error: "An error occurred while storing vectors",
+        details: error.message,
+      });
     }
   } else {
     res.setHeader("Allow", ["POST"]);
