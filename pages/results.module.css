@@ -208,3 +208,9 @@
     background-color: rgba(75, 85, 99, 1);
   }
 }
+
+@media (max-width: 768px) {
+  .imageActions {
+    opacity: 1; /* Ensure the icons are always visible on mobile */
+  }
+}
