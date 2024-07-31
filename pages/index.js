@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 import styles from "./index.module.css";
+import Script from "next/script";
 
 export default function Home() {
   return (
@@ -59,12 +60,12 @@ export default function Home() {
           content="https://infinitememes.lol/INFINITE-MEMES.png"
         />
         <meta property="og:url" content="https://infinitememes.lol/" />
-        <script
-          defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id="4a6ad139-9f43-482c-ab1c-179920236491"
-        ></script>
       </Head>
+      <Script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="4a6ad139-9f43-482c-ab1c-179920236491"
+      />
       <div className={styles.container}>
         <div className={styles.main}>
           <h1 className={styles.title}>Infinite Memes Generator ✨</h1>

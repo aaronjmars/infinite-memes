@@ -80,6 +80,44 @@
   background-color: white;
 }
 
+.imageActions {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.imageWrapper:hover .imageActions {
+  opacity: 1;
+}
+
+.actionButton {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.actionButton:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.actionButton svg {
+  width: 16px;
+  height: 16px;
+}
+
 .fullscreenOverlay {
   position: fixed;
   inset: 0;
@@ -94,23 +132,6 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-}
-
-.iframeContainer {
-  padding: 0.5rem;
-}
-
-.iframeImageGrid {
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
-}
-
-.iframeImageContainer {
-  aspect-ratio: 1;
-}
-
-.iframeImage {
-  object-fit: cover;
 }
 
 .zoomOverlay {
@@ -138,7 +159,24 @@
   object-fit: contain;
 }
 
-/* Adjust iframe styles to ensure zoom works */
+/* iframe styles */
+.iframeContainer {
+  padding: 0.5rem;
+}
+
+.iframeImageGrid {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.iframeImageContainer {
+  aspect-ratio: 1;
+}
+
+.iframeImage {
+  object-fit: cover;
+}
+
 .iframeContainer .zoomOverlay {
   position: absolute;
 }
@@ -159,5 +197,14 @@
 
   .generateButton:hover {
     background-image: linear-gradient(to right, #0e7490, #1e40af, #6d28d9);
+  }
+
+  .actionButton {
+    background-color: rgba(55, 65, 81, 0.8);
+    color: white;
+  }
+
+  .actionButton:hover {
+    background-color: rgba(75, 85, 99, 1);
   }
 }

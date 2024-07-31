@@ -12,30 +12,69 @@ export default function SearchBar() {
     if (query.trim()) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/meme-generate", {
+        console.log("Initiating search for:", query);
+
+        // Check for similar existing memes
+        const checkResponse = await fetch("/api/vector-search", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ searchQuery: query }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, page: 0, checkOnly: true }),
         });
 
-        if (!response.ok) {
-          throw new Error("Search request failed");
+        if (!checkResponse.ok) throw new Error("Vector search check failed");
+        const { shouldGenerateNew, mostSimilarScore } =
+          await checkResponse.json();
+
+        console.log("Similarity check result:", {
+          shouldGenerateNew,
+          mostSimilarScore,
+        });
+
+        let generatedMemes = [];
+        if (shouldGenerateNew) {
+          console.log("Generating new memes");
+          const generationResponse = await fetch("/api/meme-generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ searchQuery: query }),
+          });
+
+          if (!generationResponse.ok) throw new Error("Meme generation failed");
+          generatedMemes = await generationResponse.json();
+
+          console.log("Storing generated memes");
+          await fetch("/api/vector-store", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              query,
+              imageUrls: generatedMemes
+                .map((meme) => meme.output)
+                .filter((url) => url),
+            }),
+          });
         }
 
-        const results = await response.json();
-        const imageUrls = results
-          .map((result) => result.output)
-          .filter((url) => url);
+        // Search for memes (including newly generated ones if any)
+        console.log("Searching for memes");
+        const searchResponse = await fetch("/api/vector-search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, page: 0 }),
+        });
 
-        if (imageUrls.length === 0) {
-          throw new Error("No images were generated");
-        }
+        if (!searchResponse.ok) throw new Error("Vector search failed");
+        const { results, totalResults } = await searchResponse.json();
 
         router.push({
           pathname: "/results",
-          query: { imageUrls: JSON.stringify(imageUrls) },
+          query: {
+            initialResults: JSON.stringify(results),
+            totalResults,
+            searchQuery: query,
+            similarityScore: mostSimilarScore,
+            isNewlyGenerated: shouldGenerateNew.toString(),
+          },
         });
       } catch (error) {
         console.error("Search error:", error);
