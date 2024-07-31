@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import ids from "../imageGeneratorIDs.json";
 
 export const config = {
-  maxDuration: 120, // Increased duration due to multiple API calls
+  maxDuration: 60,
 };
 
 const glifApiToken = process.env.GLIF_API_KEY;
