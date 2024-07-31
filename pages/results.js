@@ -68,7 +68,7 @@ export default function Results() {
       setMemes(parsedResults);
       setHasMore(parsedResults.length < parseInt(totalResults));
     }
-  }, [initialResults, totalResults]);
+  }, [initialResults, totalResults, isNewlyGenerated]);
 
   const loadMoreMemes = useCallback(async () => {
     console.log("loadMoreMemes called:", {

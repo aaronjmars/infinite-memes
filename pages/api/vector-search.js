@@ -1,8 +1,11 @@
 import { Pinecone } from "@pinecone-database/pinecone";
-import { pipeline } from "@xenova/transformers";
+import OpenAI from "openai";
 
 let pinecone = null;
-let encoder = null;
+const openai = new OpenAI({
+  project: "proj_JPKR0G1JsA6na4uUBzjlaLJ0",
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 const SIMILARITY_THRESHOLD = 0.8;
 const PAGE_SIZE = 20;
@@ -10,8 +13,18 @@ const PAGE_SIZE = 20;
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const { query, page = 0, checkOnly = false } = req.body;
-      console.log("Received request:", { query, page, checkOnly });
+      const {
+        query,
+        page = 0,
+        checkOnly = false,
+        isNewlyGenerated = false,
+      } = req.body;
+      console.log("Received request:", {
+        query,
+        page,
+        checkOnly,
+        isNewlyGenerated,
+      });
 
       if (!query) {
         return res.status(400).json({ error: "Query is required" });
@@ -23,24 +36,18 @@ export default async function handler(req, res) {
         });
       }
 
-      if (!encoder) {
-        encoder = await pipeline(
-          "feature-extraction",
-          "Xenova/all-MiniLM-L6-v2"
-        );
-      }
+      const index = pinecone.Index("memes-vector");
 
-      const index = pinecone.Index("meme-vectors");
-
-      const queryEmbedding = await encoder(query, {
-        pooling: "mean",
-        normalize: true,
+      const embeddingResponse = await openai.embeddings.create({
+        model: "text-embedding-3-small",
+        input: query,
       });
 
-      // For the initial check, we only need to know if we should generate new memes
+      const queryEmbedding = embeddingResponse.data[0].embedding;
+
       if (checkOnly) {
         const checkResponse = await index.query({
-          vector: Array.from(queryEmbedding.data),
+          vector: queryEmbedding,
           topK: 1,
           includeMetadata: true,
         });
@@ -57,9 +64,9 @@ export default async function handler(req, res) {
         return res.status(200).json({ shouldGenerateNew, mostSimilarScore });
       }
 
-      // For the full search, we retrieve all relevant memes
+      console.log(queryEmbedding);
       const searchResponse = await index.query({
-        vector: Array.from(queryEmbedding.data),
+        vector: Array.from(queryEmbedding),
         topK: 10000,
         includeMetadata: true,
       });
@@ -75,17 +82,24 @@ export default async function handler(req, res) {
         totalResults: results.length,
         mostSimilarScore,
       });
-
+      
       const paginatedResults = results.slice(
         page * PAGE_SIZE,
         (page + 1) * PAGE_SIZE
       );
+
+      console.log("Search results:", {
+        results: paginatedResults,
+        totalResults: results.length,
+        mostSimilarScore,
+      });
 
       res.status(200).json({
         results: paginatedResults,
         totalResults: results.length,
         mostSimilarScore,
       });
+      
     } catch (error) {
       console.error("Vector search error:", error);
       res.status(500).json({
