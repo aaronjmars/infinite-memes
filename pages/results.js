@@ -56,35 +56,19 @@ export default function Results() {
   const [isInIframe, setIsInIframe] = useState(false);
 
   useEffect(() => {
-    console.log("Initial render:", {
-      initialResults,
-      totalResults,
-      isNewlyGenerated,
-    });
     setIsInIframe(window.self !== window.top);
     if (initialResults) {
       const parsedResults = JSON.parse(initialResults);
-      console.log("Setting initial memes:", parsedResults.length);
       setMemes(parsedResults);
       setHasMore(parsedResults.length < parseInt(totalResults));
     }
   }, [initialResults, totalResults, isNewlyGenerated]);
 
   const loadMoreMemes = useCallback(async () => {
-    console.log("loadMoreMemes called:", {
-      loading,
-      hasMore,
-      page,
-      memes: memes.length,
-    });
     if (loading || !hasMore) return;
     setLoading(true);
     try {
       const nextPage = page + 1;
-      console.log("Fetching more memes:", {
-        query: searchQuery,
-        page: nextPage,
-      });
       const response = await fetch("/api/vector-search", {
         method: "POST",
         headers: {
@@ -96,14 +80,10 @@ export default function Results() {
         }),
       });
       const data = await response.json();
-      console.log("Received data:", {
-        resultsLength: data.results.length,
-        totalResults: data.totalResults,
-      });
+
       if (data.results.length > 0) {
         setMemes((prevMemes) => {
           const newMemes = [...prevMemes, ...data.results];
-          console.log("Updated memes:", newMemes.length);
           return newMemes;
         });
         setPage(nextPage);
@@ -126,7 +106,6 @@ export default function Results() {
         window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.offsetHeight - 100
       ) {
-        console.log("Scroll threshold reached");
         loadMoreMemes();
       }
     };
@@ -189,15 +168,6 @@ export default function Results() {
         </div>
       )}
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold mb-4">Results for: {searchQuery}</h2>
-        {isNewlyGenerated === "true" ? (
-          <p className="mb-4">New memes generated for this query!</p>
-        ) : (
-          <p className="mb-4">
-            Showing existing memes (Similarity score:{" "}
-            {(parseFloat(similarityScore) * 100).toFixed(2)}%)
-          </p>
-        )}
         {memes.length > 0 ? (
           <div
             className={`${styles.imageGrid} ${

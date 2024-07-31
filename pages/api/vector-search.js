@@ -7,7 +7,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const SIMILARITY_THRESHOLD = 0.8;
+const SIMILARITY_THRESHOLD = 0.7;
 const PAGE_SIZE = 20;
 
 export default async function handler(req, res) {
@@ -19,12 +19,6 @@ export default async function handler(req, res) {
         checkOnly = false,
         isNewlyGenerated = false,
       } = req.body;
-      console.log("Received request:", {
-        query,
-        page,
-        checkOnly,
-        isNewlyGenerated,
-      });
 
       if (!query) {
         return res.status(400).json({ error: "Query is required" });
@@ -56,15 +50,9 @@ export default async function handler(req, res) {
           checkResponse.matches.length > 0 ? checkResponse.matches[0].score : 0;
         const shouldGenerateNew = mostSimilarScore < SIMILARITY_THRESHOLD;
 
-        console.log("Similarity check result:", {
-          mostSimilarScore,
-          shouldGenerateNew,
-        });
-
         return res.status(200).json({ shouldGenerateNew, mostSimilarScore });
       }
 
-      console.log(queryEmbedding);
       const searchResponse = await index.query({
         vector: Array.from(queryEmbedding),
         topK: 10000,
@@ -77,22 +65,11 @@ export default async function handler(req, res) {
       }));
 
       const mostSimilarScore = results.length > 0 ? results[0].score : 0;
-
-      console.log("Search results:", {
-        totalResults: results.length,
-        mostSimilarScore,
-      });
       
       const paginatedResults = results.slice(
         page * PAGE_SIZE,
         (page + 1) * PAGE_SIZE
       );
-
-      console.log("Search results:", {
-        results: paginatedResults,
-        totalResults: results.length,
-        mostSimilarScore,
-      });
 
       res.status(200).json({
         results: paginatedResults,

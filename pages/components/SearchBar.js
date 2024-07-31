@@ -12,9 +12,6 @@ export default function SearchBar() {
     if (query.trim()) {
       setIsLoading(true);
       try {
-        console.log("Initiating search for:", query);
-
-        // Check for similar existing memes
         const checkResponse = await fetch("/api/vector-search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -25,14 +22,8 @@ export default function SearchBar() {
         const { shouldGenerateNew, mostSimilarScore } =
           await checkResponse.json();
 
-        console.log("Similarity check result:", {
-          shouldGenerateNew,
-          mostSimilarScore,
-        });
-
         let generatedMemes = [];
         if (shouldGenerateNew) {
-          console.log("Generating new memes");
           const generationResponse = await fetch("/api/meme-generate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -42,7 +33,6 @@ export default function SearchBar() {
           if (!generationResponse.ok) throw new Error("Meme generation failed");
           generatedMemes = await generationResponse.json();
 
-          console.log("Storing generated memes");
           await fetch("/api/vector-store", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -55,8 +45,6 @@ export default function SearchBar() {
           });
         }
 
-        // Search for memes (including newly generated ones if any)
-        console.log("Searching for memes");
         const searchResponse = await fetch("/api/vector-search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
