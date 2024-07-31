@@ -28,7 +28,7 @@ export default function Farcaster() {
         />
         <meta
           name="twitter:image"
-          content="https://infinitememes.lol/INFINITE-MEMES.png""
+          content="https://infinitememes.lol/INFINITE-MEMES.png"
         />
       </Helmet>
       <div className={styles.container}>
