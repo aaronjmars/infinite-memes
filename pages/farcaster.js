@@ -1,13 +1,12 @@
 import Cast from "./components/Cast";
 import Footer from "./components/Footer";
-import { Helmet } from "react-helmet";
 import { Analytics } from "@vercel/analytics/react";
 import styles from "./index.module.css";
 
 export default function Farcaster() {
   return (
     <>
-      <Helmet>
+      <Head>
         <title>Farcaster Meme Generator ✨</title>
         <meta property="og:title" content="Farcaster Meme Generator ✨" />
         <meta
@@ -30,7 +29,7 @@ export default function Farcaster() {
           name="twitter:image"
           content="https://infinitememes.lol/INFINITE-MEMES.png"
         />
-      </Helmet>
+      </Head>
       <div className={styles.container}>
         <div className={styles.main}>
           <h1 className={styles.title}>Farcaster Meme Generator ✨</h1>
