@@ -39,7 +39,7 @@ export default function Farcaster() {
         />
         <meta
           property="og:image"
-          content="https://infinitememes.lol/INFINITE-MEMES.png"
+          content="https://infinitememe.lol/INFINITE-MEMES.png"
         />
         <meta name="twitter:card" content="player" />
         <meta name="twitter:site" content="@leo5imon" />
@@ -55,9 +55,9 @@ export default function Farcaster() {
         <meta name="twitter:player:height" content="560" />
         <meta
           name="twitter:image"
-          content="https://infinitememes.lol/INFINITE-MEMES.png"
+          content="https://infinitememe.lol/INFINITE-MEMES.png"
         />
-        <meta property="og:url" content="https://infinitememes.lol/" />
+        <meta property="og:url" content="https://infinitememes.lol/farcaster" />
         <script
           defer
           src="https://cloud.umami.is/script.js"
