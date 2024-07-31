@@ -248,7 +248,7 @@ export default function Results() {
         {loading && <p className="text-center mt-4">Loading more memes...</p>}
         {!hasMore && (
           <p className="text-center mt-4">
-            You've reached the end of the memes 🫡
+            You&#39;ve reached the end of the memes 🫡
           </p>
         )}
       </div>
