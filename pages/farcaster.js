@@ -9,7 +9,7 @@ export default function Farcaster() {
     <>
       <Helmet>
         <title>Farcaster Meme Generator ✨</title>
-        <meta property="og:title" content="Farcaster Meme Generator ✨" />
+        <meta property="og:title" content="Farcaster tt Generator ✨" />
         <meta
           property="og:description"
           content="Create and share memes with Farcaster Meme Generator."
@@ -18,7 +18,7 @@ export default function Farcaster() {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://yourwebsite.com/path/to/your/image.jpg"
+          content="https://infinitememes.lol/INFINITE-MEMES.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Farcaster Meme Generator ✨" />
@@ -28,7 +28,7 @@ export default function Farcaster() {
         />
         <meta
           name="twitter:image"
-          content="https://yourwebsite.com/path/to/your/image.jpg"
+          content="https://infinitememes.lol/INFINITE-MEMES.png""
         />
       </Helmet>
       <div className={styles.container}>
