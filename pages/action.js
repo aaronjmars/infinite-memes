@@ -162,11 +162,19 @@ export default function CombinedSearchResults() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMoreMemes]);
 
-  const handleImageClick = (imageUrl) => {
+  const handleImageClick = (meme) => {
     try {
+      // Ensure we're using the correct property for the image URL
+      const imageUrl = meme.imageUrl || meme.image_url || meme.url;
+      
+      if (!imageUrl) {
+        console.error("No valid image URL found in meme object:", meme);
+        return;
+      }
+
       const updatedCastState = {
         ...castState,
-        embeds: [imageUrl],
+        embeds: [...castState.embeds, imageUrl],
       };
       const postData = {
         type: "createCast",
