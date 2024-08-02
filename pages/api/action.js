@@ -35,7 +35,7 @@ export default function handler(req, res) {
       queryParams.append("state", JSON.stringify(stateData));
     }
 
-    const url = `https://infinitememes.lol/action?${queryParams.toString()}`;
+    const url = `https://infinitememe.lol/action?${queryParams.toString()}`;
 
     const response = {
       type: "form",
