@@ -39,10 +39,6 @@ export default function Action() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("Current castState:", castState);
-  }, [castState]);
-
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
@@ -146,15 +142,14 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: meme.imageUrl, // Set embeds to the new image URL
+        embeds: meme.imageUrl,
       };
 
       const postData = {
         type: "createCast",
         data: {
           cast: {
-            text: "test",
-            embeds: ["https://infinitememes.lol/INFINITE-MEMES.png"],
+            text: "test"
           },
         },
       };
