@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -10,10 +10,10 @@
 
 .title {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  color: #1f2937;
+  color: #000000;
 }
 
 .searchBar {
@@ -84,7 +84,7 @@
 
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -95,20 +95,66 @@
   }
 }
 
-@media (min-width: 768px) {
-  .imageGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
-  }
+.imageContainer {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  transform: scale(1);
 }
 
+.imageContainer:hover {
+  transform: scale(1.05);
+}
+
+.imageWrapper {
+  position: relative;
+  padding: 2px;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.imageWrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, #8b5cf6, #3b82f6, #06b6d4);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+}
+
+.imageWrapper:hover::before {
+  opacity: 1;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  position: relative;
+  z-index: 2;
+  background-color: white;
+}
+
+.noResults,
+.loading,
+.endMessage {
+  text-align: center;
+  margin-top: 2rem;
+  color: #6b7280;
+}
+
+/* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .container {
     background-color: #1f2937;
   }
 
   .title {
-    color: #f3f4f6;
+    color: #ffffff;
   }
 
   .inputWrapper {
@@ -119,7 +165,15 @@
     color: #f3f4f6;
   }
 
-  /* ... (rest of the dark mode styles remain the same) */
+  .image {
+    background-color: #374151;
+  }
+
+  .noResults,
+  .loading,
+  .endMessage {
+    color: #9ca3af;
+  }
 }
 
 @media (max-width: 768px) {
@@ -135,9 +189,5 @@
   .button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
-  }
-
-  .imageActions {
-    opacity: 1;
   }
 }

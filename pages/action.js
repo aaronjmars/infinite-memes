@@ -224,7 +224,7 @@ export default function Action() {
             Generate your memes on the search bar above 🌟
           </p>
         )}
-        {isLoading && <p className={styles.loading}>Loading more memes...</p>}
+        {isLoading && <p className={styles.loading}>Loading memes...</p>}
         {!hasMore && (
           <p className={styles.endMessage}>
             You&#39;ve reached the end of the memes 🫡
