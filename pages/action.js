@@ -1,41 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./action.module.css";
 
-const CopyIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-  </svg>
-);
-
-const DownloadIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="7 10 12 15 17 10"></polyline>
-    <line x1="12" y1="15" x2="12" y2="3"></line>
-  </svg>
-);
-
 export default function Action() {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -64,42 +29,6 @@ export default function Action() {
       }
     }
   }, []);
-
-  const copyToClipboard = async (imageUrl, event) => {
-    event.stopPropagation();
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type]: blob,
-        }),
-      ]);
-      alert("Image copied to clipboard!");
-    } catch (err) {
-      console.error("Failed to copy image: ", err);
-      alert("Failed to copy image. Please try again.");
-    }
-  };
-
-  const downloadImage = async (imageUrl, event) => {
-    event.stopPropagation();
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `meme-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Failed to download image: ", err);
-      alert("Failed to download image. Please try again.");
-    }
-  };
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -273,22 +202,6 @@ export default function Action() {
                     alt={`Generated image ${index + 1}`}
                     className={styles.image}
                   />
-                  <div className={styles.imageActions}>
-                    <button
-                      onClick={(e) => copyToClipboard(meme.imageUrl, e)}
-                      className={styles.actionButton}
-                      aria-label="Copy to clipboard"
-                    >
-                      <CopyIcon />
-                    </button>
-                    <button
-                      onClick={(e) => downloadImage(meme.imageUrl, e)}
-                      className={styles.actionButton}
-                      aria-label="Download image"
-                    >
-                      <DownloadIcon />
-                    </button>
-                  </div>
                 </div>
               </div>
             ))}
