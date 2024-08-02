@@ -39,6 +39,10 @@ export default function Action() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("Current castState:", castState);
+  }, [castState]);
+
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
@@ -142,15 +146,13 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: meme.imageUrl,
+        embeds: [...castState.embeds, meme.imageUrl],
       };
 
       const postData = {
         type: "createCast",
         data: {
-          cast: {
-            text: "test"
-          },
+          cast: updatedCastState,
         },
       };
 

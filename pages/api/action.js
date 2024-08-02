@@ -51,8 +51,8 @@ export default function handler(req, res) {
       name: "Infinite Memes",
       icon: "flame",
       description: "AI generated memes",
-      aboutUrl: "https://infinitememes.lol",
-      imageUrl: "https://infinitememes.lol/ACTION.png",
+      aboutUrl: "https://infinitememe.lol",
+      imageUrl: "https://infinitememe.lol/ACTION.png",
       action: {
         type: "post",
       },
