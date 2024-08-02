@@ -146,7 +146,7 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: [...castState.embeds, meme.imageUrl],
+        embeds: meme.imageUrl, // Set embeds to the new image URL
       };
 
       const postData = {
