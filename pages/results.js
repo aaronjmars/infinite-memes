@@ -224,14 +224,12 @@ export default function Results() {
       </div>
 
       {zoomedImage && (
-        <div className={styles.zoomOverlay} onClick={closeZoom}>
-          <div className={styles.zoomImageContainer}>
-            <img
-              src={zoomedImage}
-              alt="Zoomed image"
-              className={styles.zoomImage}
-            />
-          </div>
+        <div className={styles.fullscreenOverlay} onClick={closeZoom}>
+          <img
+            src={zoomedImage}
+            alt="Fullscreen image"
+            className={styles.fullscreenImage}
+          />
         </div>
       )}
     </div>
