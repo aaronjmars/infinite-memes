@@ -145,7 +145,7 @@ export default function Action() {
     console.log(castState);
     try {
       const updatedCastState = {
-        text: "test",
+        ...castState,
         embeds: [...castState.embeds, meme.imageUrl],
       };
 
