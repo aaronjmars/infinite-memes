@@ -36,7 +36,7 @@ const DownloadIcon = () => (
   </svg>
 );
 
-export default function CombinedSearchResults() {
+export default function Action() {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [memes, setMemes] = useState([]);
@@ -48,6 +48,7 @@ export default function CombinedSearchResults() {
     embeds: [],
     parent: null,
   });
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -164,25 +165,18 @@ export default function CombinedSearchResults() {
 
   const handleImageClick = (meme) => {
     try {
-        console.log(meme);
-      // Ensure we're using the correct property for the image URL
-      const imageUrl = meme.imageUrl || meme.image_url || meme.url;
-      
-      if (!imageUrl) {
-        console.error("No valid image URL found in meme object:", meme);
-        return;
-      }
-
       const updatedCastState = {
         ...castState,
-        embeds: [...castState.embeds, imageUrl],
+        embeds: [...castState.embeds, meme],
       };
+
       const postData = {
         type: "createCast",
         data: {
           cast: updatedCastState,
         },
       };
+
       window.parent.postMessage(postData, "*");
       console.log("PostMessage sent successfully");
 
@@ -196,21 +190,27 @@ export default function CombinedSearchResults() {
   return (
     <div className={styles.container}>
       <div className={styles.searchBar}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-          className={styles.input}
-          placeholder="What's the meme about?"
-        />
-        <button
-          onClick={handleSearch}
-          className={styles.button}
-          disabled={isLoading}
-        >
-          {isLoading ? "Generating..." : "Generate"}
-        </button>
+        <div className={`${styles.searchWrapper} ${isFocused ? styles.searchWrapperFocused : styles.searchWrapperBlurred}`}>
+          <div className={styles.inputWrapper}>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              className={styles.input}
+              placeholder="What's the meme about?"
+            />
+            <button
+              onClick={handleSearch}
+              className={`${styles.button} ${isLoading ? styles.buttonDisabled : styles.buttonEnabled}`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Generating..." : "Generate"}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className={styles.results}>
@@ -220,7 +220,7 @@ export default function CombinedSearchResults() {
               <div
                 key={index}
                 className={styles.imageContainer}
-                onClick={() => handleImageClick(meme.imageUrl)}
+                onClick={() => handleImageClick(meme)}
               >
                 <div className={styles.imageWrapper}>
                   <img
