@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styles from "./CombinedSearchResults.module.css";
+import styles from "./action.module.css";
 
 const CopyIcon = () => (
   <svg
