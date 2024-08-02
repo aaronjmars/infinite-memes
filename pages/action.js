@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styles from './action.module.css';
+import styles from "./CombinedSearchResults.module.css";
 
 const CopyIcon = () => (
   <svg
@@ -43,6 +43,26 @@ export default function CombinedSearchResults() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [totalResults, setTotalResults] = useState(0);
+  const [castState, setCastState] = useState({
+    text: "",
+    embeds: [],
+    parent: null,
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const stateParam = params.get("state");
+    if (stateParam) {
+      try {
+        const decodedState = JSON.parse(decodeURIComponent(stateParam));
+        if (decodedState.cast) {
+          setCastState(decodedState.cast);
+        }
+      } catch (error) {
+        console.error("Error parsing state parameter:", error);
+      }
+    }
+  }, []);
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -144,15 +164,21 @@ export default function CombinedSearchResults() {
 
   const handleImageClick = (imageUrl) => {
     try {
+      const updatedCastState = {
+        ...castState,
+        embeds: [...castState.embeds, imageUrl],
+      };
       const postData = {
         type: "createCast",
         data: {
-          cast: {
-            embeds: [imageUrl],
-          },
+          cast: updatedCastState,
         },
       };
       window.parent.postMessage(postData, "*");
+      console.log("PostMessage sent successfully");
+
+      // Update local state
+      setCastState(updatedCastState);
     } catch (error) {
       console.error("Error sending postMessage:", error);
     }
