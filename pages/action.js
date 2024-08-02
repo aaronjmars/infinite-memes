@@ -165,10 +165,11 @@ export default function Action() {
 
   const handleImageClick = (meme) => {
     console.log(meme);
+    console.log(meme.imageUrl);
     try {
       const updatedCastState = {
         ...castState,
-        embeds: [...castState.embeds, meme.imageUrl],
+        embeds: meme.imageUrl,
       };
 
       const postData = {
