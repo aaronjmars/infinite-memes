@@ -164,6 +164,7 @@ export default function CombinedSearchResults() {
 
   const handleImageClick = (meme) => {
     try {
+        console.log(meme);
       // Ensure we're using the correct property for the image URL
       const imageUrl = meme.imageUrl || meme.image_url || meme.url;
       
