@@ -18,17 +18,30 @@ export default function Action() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const stateParam = params.get("state");
+    console.log("Raw state parameter:", stateParam);
+
     if (stateParam) {
       try {
         const decodedState = JSON.parse(decodeURIComponent(stateParam));
+        console.log("Decoded state:", decodedState);
+
         if (decodedState.cast) {
+          console.log("Setting castState to:", decodedState.cast);
           setCastState(decodedState.cast);
+        } else {
+          console.log("No 'cast' property found in decoded state");
         }
       } catch (error) {
         console.error("Error parsing state parameter:", error);
       }
+    } else {
+      console.log("No state parameter found in URL");
     }
   }, []);
+
+  useEffect(() => {
+    console.log("Current castState:", castState);
+  }, [castState]);
 
   const handleSearch = async () => {
     if (query.trim()) {
