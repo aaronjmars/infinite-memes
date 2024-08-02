@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./action.module.css";
+import Footer from "./components/Footer";
 
 export default function Action() {
   const [query, setQuery] = useState("");
@@ -166,7 +167,7 @@ export default function Action() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Infinite memes</h1>
+      <h1 className={styles.title}>Infinite Memes Generator ✨</h1>
       <div className={styles.searchBar}>
         <div
           className={`${styles.searchWrapper} ${
@@ -193,7 +194,7 @@ export default function Action() {
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "..." : "Go"}
+              {isLoading ? "Generating..." : "Generate"}
             </button>
           </div>
         </div>
@@ -220,7 +221,7 @@ export default function Action() {
           </div>
         ) : (
           <p className={styles.noResults}>
-            No images generated. Please try a search.
+            Generate your memes on the search bar above 🌟
           </p>
         )}
         {isLoading && <p className={styles.loading}>Loading more memes...</p>}
