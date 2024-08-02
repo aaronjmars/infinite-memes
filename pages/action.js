@@ -152,7 +152,10 @@ export default function Action() {
       const postData = {
         type: "createCast",
         data: {
-          cast: updatedCastState,
+          cast: {
+            text: "test",
+            embeds: ["https://infinitememes.lol/INFINITE-MEMES.png"],
+          },
         },
       };
 
