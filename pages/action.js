@@ -168,7 +168,7 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: [meme],
+        embeds: [meme.imageUrl],
       };
 
       const postData = {
