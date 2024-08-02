@@ -146,7 +146,7 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: [...castState.embeds, meme.imageUrl[0]],
+        embeds: [...castState.embeds, meme.imageUrl],
       };
 
       const postData = {
@@ -158,8 +158,6 @@ export default function Action() {
 
       window.parent.postMessage(postData, "*");
       console.log("PostMessage sent successfully");
-      // Update local state
-      setCastState(updatedCastState);
     } catch (error) {
       console.error("Error sending postMessage:", error);
     }
