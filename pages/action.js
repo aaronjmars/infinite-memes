@@ -19,30 +19,18 @@ export default function Action() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const stateParam = params.get("state");
-    console.log("Raw state parameter:", stateParam);
 
     if (stateParam) {
       try {
         const decodedState = JSON.parse(decodeURIComponent(stateParam));
-        console.log("Decoded state:", decodedState);
-
         if (decodedState.cast) {
-          console.log("Setting castState to:", decodedState.cast);
           setCastState(decodedState.cast);
-        } else {
-          console.log("No 'cast' property found in decoded state");
         }
       } catch (error) {
-        console.error("Error parsing state parameter:", error);
+        // Error handling can be added here if needed
       }
-    } else {
-      console.log("No state parameter found in URL");
     }
   }, []);
-
-  useEffect(() => {
-    console.log("Current castState:", castState);
-  }, [castState]);
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -95,7 +83,6 @@ export default function Action() {
         setHasMore(results.length < totalResults);
         setPage(0);
       } catch (error) {
-        console.error("Search error:", error);
         alert("An error occurred while searching. Please try again.");
       } finally {
         setIsLoading(false);
@@ -123,7 +110,7 @@ export default function Action() {
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error loading more memes:", error);
+      // Error handling can be added here if needed
     } finally {
       setIsLoading(false);
     }
@@ -143,7 +130,6 @@ export default function Action() {
   }, [loadMoreMemes]);
 
   const handleImageClick = (meme) => {
-    console.log(castState);
     try {
       const updatedCastState = {
         ...castState,
@@ -157,17 +143,15 @@ export default function Action() {
         },
       };
 
-      console.log(postData);
       window.parent.postMessage(postData, "*");
-      console.log("PostMessage sent successfully");
     } catch (error) {
-      console.error("Error sending postMessage:", error);
+      // Error handling can be added here if needed
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Infinite Memes Generator ✨</h1>
+      <h1 className={styles.title}>Infinite Memes ✨</h1>
       <div className={styles.searchBar}>
         <div
           className={`${styles.searchWrapper} ${
