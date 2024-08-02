@@ -156,6 +156,7 @@ export default function Action() {
         },
       };
 
+      console.log(postData);
       window.parent.postMessage(postData, "*");
       console.log("PostMessage sent successfully");
     } catch (error) {
