@@ -133,7 +133,7 @@ export default function Action() {
     console.log(meme.imageUrl);
     try {
       const updatedCastState = {
-        ...castState,
+        text: "test",
         embeds: [...castState.embeds, meme.imageUrl],
       };
 
