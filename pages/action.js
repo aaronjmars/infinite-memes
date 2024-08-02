@@ -166,7 +166,7 @@ export default function CombinedSearchResults() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: [...castState.embeds, imageUrl],
+        embeds: [imageUrl],
       };
       const postData = {
         type: "createCast",
