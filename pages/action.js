@@ -227,7 +227,7 @@ export default function CombinedSearchResults() {
         {isLoading && <p className={styles.loading}>Loading more memes...</p>}
         {!hasMore && (
           <p className={styles.endMessage}>
-            You've reached the end of the memes 🫡
+            You&#39;ve reached the end of the memes 🫡
           </p>
         )}
       </div>
