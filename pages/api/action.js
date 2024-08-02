@@ -39,7 +39,7 @@ export default function handler(req, res) {
 
     const response = {
       type: "form",
-      title: "Infinite Memes",
+      title: "Generate Memes",
       url: url,
     };
 
@@ -50,9 +50,9 @@ export default function handler(req, res) {
       type: "composer",
       name: "Infinite Memes",
       icon: "flame",
-      description: "Create memes",
+      description: "AI generated memes",
       aboutUrl: "https://infinitememes.lol",
-      imageUrl: "https://app.magi.lol/ACTION.png",
+      imageUrl: "https://infinitememes.lol/ACTION.png",
       action: {
         type: "post",
       },
