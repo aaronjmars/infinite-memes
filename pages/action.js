@@ -65,6 +65,42 @@ export default function Action() {
     }
   }, []);
 
+  const copyToClipboard = async (imageUrl, event) => {
+    event.stopPropagation();
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+      alert("Image copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy image: ", err);
+      alert("Failed to copy image. Please try again.");
+    }
+  };
+
+  const downloadImage = async (imageUrl, event) => {
+    event.stopPropagation();
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `meme-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to download image: ", err);
+      alert("Failed to download image. Please try again.");
+    }
+  };
+
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
@@ -169,7 +205,7 @@ export default function Action() {
     try {
       const updatedCastState = {
         ...castState,
-        embeds: meme.imageUrl,
+        embeds: [...castState.embeds, meme.imageUrl],
       };
 
       const postData = {
@@ -181,7 +217,6 @@ export default function Action() {
 
       window.parent.postMessage(postData, "*");
       console.log("PostMessage sent successfully");
-
       // Update local state
       setCastState(updatedCastState);
     } catch (error) {
@@ -192,7 +227,13 @@ export default function Action() {
   return (
     <div className={styles.container}>
       <div className={styles.searchBar}>
-        <div className={`${styles.searchWrapper} ${isFocused ? styles.searchWrapperFocused : styles.searchWrapperBlurred}`}>
+        <div
+          className={`${styles.searchWrapper} ${
+            isFocused
+              ? styles.searchWrapperFocused
+              : styles.searchWrapperBlurred
+          }`}
+        >
           <div className={styles.inputWrapper}>
             <input
               type="text"
@@ -206,7 +247,9 @@ export default function Action() {
             />
             <button
               onClick={handleSearch}
-              className={`${styles.button} ${isLoading ? styles.buttonDisabled : styles.buttonEnabled}`}
+              className={`${styles.button} ${
+                isLoading ? styles.buttonDisabled : styles.buttonEnabled
+              }`}
               disabled={isLoading}
             >
               {isLoading ? "Generating..." : "Generate"}
@@ -232,20 +275,14 @@ export default function Action() {
                   />
                   <div className={styles.imageActions}>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Implement copy to clipboard functionality
-                      }}
+                      onClick={(e) => copyToClipboard(meme.imageUrl, e)}
                       className={styles.actionButton}
                       aria-label="Copy to clipboard"
                     >
                       <CopyIcon />
                     </button>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Implement download functionality
-                      }}
+                      onClick={(e) => downloadImage(meme.imageUrl, e)}
                       className={styles.actionButton}
                       aria-label="Download image"
                     >

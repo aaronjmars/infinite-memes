@@ -39,7 +39,7 @@ export default function handler(req, res) {
 
     const response = {
       type: "form",
-      title: "Generate Memes",
+      title: "Generate AI Memes",
       url: url,
     };
 
