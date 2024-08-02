@@ -166,6 +166,7 @@ export default function Action() {
 
   return (
     <div className={styles.container}>
+      <h1 className={styles.title}>Infinite memes</h1>
       <div className={styles.searchBar}>
         <div
           className={`${styles.searchWrapper} ${
@@ -192,7 +193,7 @@ export default function Action() {
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "Generating..." : "Generate"}
+              {isLoading ? "..." : "Go"}
             </button>
           </div>
         </div>
