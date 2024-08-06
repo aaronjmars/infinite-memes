@@ -50,7 +50,7 @@ export default function handler(req, res) {
       type: "composer",
       name: "Infinite Memes",
       icon: "flame",
-      description: "Generate memes with AI",
+      description: "Make memes with AI",
       aboutUrl: "https://infinitememe.lol",
       imageUrl: "https://infinitememe.lol/ACTION.png",
       action: {
