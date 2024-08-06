@@ -22,6 +22,10 @@
   @apply flex-grow focus:outline-none text-sm sm:text-base px-2 sm:px-3 py-1 sm:py-2 text-gray-800 dark:text-gray-200 bg-transparent;
 }
 
+.input:disabled {
+  @apply cursor-not-allowed opacity-70;
+}
+
 .button {
   @apply ml-2 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-white text-xs sm:text-sm transition-all duration-300 ease-in-out;
 }
@@ -32,4 +36,12 @@
 
 .buttonDisabled {
   @apply bg-gray-400 dark:bg-gray-600 cursor-not-allowed;
+}
+
+.loaderContainer {
+  @apply w-full h-1 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden mt-2;
+}
+
+.loaderBar {
+  @apply h-full w-0 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 transition-all duration-100 ease-out;
 }

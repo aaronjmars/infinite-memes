@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "./SearchBar.module.css";
 
@@ -6,11 +6,31 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    let timer;
+    if (isLoading) {
+      timer = setInterval(() => {
+        setLoadingProgress((oldProgress) => {
+          const newProgress = oldProgress + 100 / 150; // Increment over 15 seconds (150 * 100ms)
+          return newProgress > 100 ? 100 : newProgress;
+        });
+      }, 100);
+    } else {
+      setLoadingProgress(0);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isLoading]);
 
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
+      setLoadingProgress(0);
       try {
         const checkResponse = await fetch("/api/vector-search", {
           method: "POST",
@@ -96,6 +116,7 @@ export default function SearchBar() {
             onKeyPress={handleKeyPress}
             className={styles.input}
             placeholder="What's the meme about?"
+            disabled={isLoading}
           />
           <button
             onClick={handleSearch}
@@ -108,6 +129,14 @@ export default function SearchBar() {
           </button>
         </div>
       </div>
+      {isLoading && (
+        <div className={styles.loaderContainer}>
+          <div
+            className={styles.loaderBar}
+            style={{ width: `${loadingProgress}%` }}
+          ></div>
+        </div>
+      )}
     </div>
   );
 }
