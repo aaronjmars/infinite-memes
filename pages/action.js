@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./action.module.css";
-import Footer from "./components/Footer";
 
 export default function Action() {
   const [query, setQuery] = useState("");
@@ -15,6 +14,7 @@ export default function Action() {
     parent: null,
   });
   const [isFocused, setIsFocused] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -35,6 +35,16 @@ export default function Action() {
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
+      setLoadingProgress(0);
+      setMemes([]);
+
+      const timer = setInterval(() => {
+        setLoadingProgress((oldProgress) => {
+          const newProgress = oldProgress + 100 / 300; // Increment over 15 seconds (150 * 100ms)
+          return newProgress > 100 ? 100 : newProgress;
+        });
+      }, 100);
+
       try {
         const checkResponse = await fetch("/api/vector-search", {
           method: "POST",
@@ -85,7 +95,9 @@ export default function Action() {
       } catch (error) {
         alert("An error occurred while searching. Please try again.");
       } finally {
+        clearInterval(timer);
         setIsLoading(false);
+        setLoadingProgress(0);
       }
     }
   };
@@ -182,6 +194,14 @@ export default function Action() {
             </button>
           </div>
         </div>
+        {isLoading && (
+          <div className={styles.loaderContainer}>
+            <div
+              className={styles.loaderBar}
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+        )}
       </div>
 
       <div className={styles.results}>
@@ -204,12 +224,13 @@ export default function Action() {
             ))}
           </div>
         ) : (
-          <p className={styles.noResults}>
-            Generate your memes on the search bar above 🌟
+          <p className={styles.messageText}>
+            {isLoading
+              ? "Loading can take between 5-25 seconds ✨"
+              : "Generate your memes on the search bar above 🌟"}
           </p>
         )}
-        {isLoading && <p className={styles.loading}>Loading memes...</p>}
-        {!hasMore && (
+        {!isLoading && !hasMore && memes.length > 0 && (
           <p className={styles.endMessage}>
             You&#39;ve reached the end of the memes 🫡
           </p>
