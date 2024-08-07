@@ -215,16 +215,23 @@
 
 @media (max-width: 768px) {
   .searchBar {
-    width: 90%;
+    width: 95%;
+  }
+
+  .messageText {
+    font-size: 14px;
   }
 
   .input {
     font-size: 16px;
-    padding: 8px 12px;
+    padding: 0px;
+    min-width: 0; /* Allows input to shrink below its content size */
   }
 
   .button {
-    padding: 8px 16px;
-    font-size: 16px;
+    padding: 8px 12px;
+    font-size: 14px;
+    white-space: nowrap; /* Prevents text from wrapping */
+    flex-shrink: 0; /* Prevents button from shrinking */
   }
 }
