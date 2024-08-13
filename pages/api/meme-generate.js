@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Search query is required" });
       }
 
-      const requests = ids.ids.slice(0, 17).map((id) =>
+      const requests = ids.ids.slice(0, 21).map((id) =>
         fetch(apiUrl, {
           method: "POST",
           headers: {
