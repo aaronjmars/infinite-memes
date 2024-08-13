@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styles from "./action.module.css";
+import styles from "./Action.module.css";
 
 const Action = () => {
   const [query, setQuery] = useState("");
