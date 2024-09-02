@@ -2,7 +2,7 @@ import ids from "../imageGeneratorIDs.json";
 import { Readable } from 'stream';
 
 export const config = {
-  maxDuration: 300, // Increased to 5 minutes
+  maxDuration: 60, // Increased to 5 minutes
   api: {
     responseLimit: false,
   },
