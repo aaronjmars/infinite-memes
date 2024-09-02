@@ -85,6 +85,7 @@ export default function SearchBar() {
               isLoading ? styles.buttonDisabled : styles.buttonEnabled
             }`}
             disabled={isLoading}
+            data-umami-event="MemeGenerate"
           >
             {isLoading ? "Generating..." : "Generate"}
           </button>
