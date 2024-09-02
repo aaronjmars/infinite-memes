@@ -173,6 +173,7 @@ const Action = () => {
 
   const handleImageClick = (meme) => {
     try {
+      window.umami.track('ActionImageClick')
       const updatedCastState = {
         ...castState,
         embeds: [...castState.embeds, meme.imageUrl],
