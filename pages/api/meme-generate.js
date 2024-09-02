@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     stream.push(JSON.stringify(data) + '\n');
   };
 
-  const requests = ids.ids.slice(0, 25).map((id, index) => 
+  const requests = ids.ids.slice(0, 24).map((id, index) => 
     fetch(apiUrl, {
       method: "POST",
       headers: {

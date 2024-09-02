@@ -62,10 +62,9 @@ export default function Home() {
         <meta property="og:url" content="https://infinitememes.lol/" />
       </Head>
       <Script
-        src="https://eu.umami.is/script.js"
-        strategy="afterInteractive"
+        defer
+        src="https://cloud.umami.is/script.js"
         data-website-id="4a6ad139-9f43-482c-ab1c-179920236491"
-        async
       />
       <div className={styles.container}>
         <div className={styles.main}>

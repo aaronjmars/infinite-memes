@@ -173,7 +173,7 @@ const Action = () => {
 
   const handleImageClick = (meme) => {
     try {
-      window.umami.track('ActionImageClick')
+      window.umami.track("ActionImageClick");
       const updatedCastState = {
         ...castState,
         embeds: [...castState.embeds, meme.imageUrl],
@@ -243,7 +243,15 @@ const Action = () => {
               <div
                 key={index}
                 className={styles.imageContainer}
-                onClick={() => memes[index] && handleImageClick(memes[index])}
+                onClick={() => {
+                  if (memes[index]) {
+                    handleImageClick(memes[index]);
+
+                    if (window.umami) {
+                      window.umami.track("ActionImageClick");
+                    }
+                  }
+                }}
               >
                 <div className={styles.imageWrapper}>
                   {memes[index] ? (
