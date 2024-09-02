@@ -173,7 +173,7 @@ const Action = () => {
 
   const handleImageClick = (meme) => {
     try {
-      window.umami.track("ActionImageClick");
+      window.umami.track("ActionMemeClick");
       const updatedCastState = {
         ...castState,
         embeds: [...castState.embeds, meme.imageUrl],
@@ -220,7 +220,7 @@ const Action = () => {
                 isLoading ? styles.buttonDisabled : styles.buttonEnabled
               }`}
               disabled={isLoading}
-              data-umami-event="{ActionMemeGenerate}"
+              data-umami-event={"ActionMemeGenerate"}
             >
               {isLoading ? "Generating..." : "Generate"}
             </button>
@@ -246,10 +246,6 @@ const Action = () => {
                 onClick={() => {
                   if (memes[index]) {
                     handleImageClick(memes[index]);
-
-                    if (window.umami) {
-                      window.umami.track("ActionImageClick");
-                    }
                   }
                 }}
               >

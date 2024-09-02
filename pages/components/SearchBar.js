@@ -10,6 +10,7 @@ export default function SearchBar() {
 
   const handleSearch = async () => {
     if (query.trim()) {
+      window.umami.track("MemeGenerate");
       setIsLoading(true);
       try {
         const checkResponse = await fetch("/api/vector-search", {
@@ -80,7 +81,6 @@ export default function SearchBar() {
             disabled={isLoading}
           />
           <button
-            data-umami-event="MemeGenerate"
             onClick={handleSearch}
             className={`${styles.button} ${
               isLoading ? styles.buttonDisabled : styles.buttonEnabled
