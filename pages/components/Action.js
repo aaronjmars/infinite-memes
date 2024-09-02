@@ -14,7 +14,8 @@ const Action = () => {
     parent: null,
   });
   const [isFocused, setIsFocused] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,7 +28,7 @@ const Action = () => {
           setCastState(decodedState.cast);
         }
       } catch (error) {
-        // Error handling can be added here if needed
+        console.error("Error parsing state parameter:", error);
       }
     }
   }, []);
@@ -35,15 +36,9 @@ const Action = () => {
   const handleSearch = async () => {
     if (query.trim()) {
       setIsLoading(true);
-      setLoadingProgress(0);
+      setGenerationProgress(0);
       setMemes([]);
-
-      const timer = setInterval(() => {
-        setLoadingProgress((oldProgress) => {
-          const newProgress = oldProgress + 100 / 300; // Increment over 15 seconds (150 * 100ms)
-          return newProgress > 100 ? 100 : newProgress;
-        });
-      }, 100);
+      setErrors({});
 
       try {
         const checkResponse = await fetch("/api/vector-search", {
@@ -53,9 +48,9 @@ const Action = () => {
         });
 
         if (!checkResponse.ok) throw new Error("Vector search check failed");
-        const { shouldGenerateNew, mostSimilarScore } = await checkResponse.json();
+        const { shouldGenerateNew, mostSimilarScore } =
+          await checkResponse.json();
 
-        let generatedMemes = [];
         if (shouldGenerateNew) {
           const generationResponse = await fetch("/api/meme-generate", {
             method: "POST",
@@ -64,39 +59,75 @@ const Action = () => {
           });
 
           if (!generationResponse.ok) throw new Error("Meme generation failed");
-          generatedMemes = await generationResponse.json();
 
-          await fetch("/api/vector-store", {
+          const reader = generationResponse.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk
+              .split("\n")
+              .filter((line) => line.trim() !== "");
+
+            for (const line of lines) {
+              const data = JSON.parse(line);
+              if (data.error) {
+                console.error(
+                  `Error generating meme ${data.index}:`,
+                  data.error
+                );
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  [data.index]: data.error,
+                }));
+              } else {
+                setMemes((prevMemes) => {
+                  const newMemes = [...prevMemes];
+                  newMemes[data.index] = {
+                    imageUrl: data.result.output,
+                    score: 1,
+                  };
+                  return newMemes;
+                });
+
+                setGenerationProgress(((data.index + 1) / 22) * 100);
+
+                // Store the generated meme in vector store
+                await fetch("/api/vector-store", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    query,
+                    imageUrls: [data.result.output],
+                  }),
+                });
+              }
+            }
+          }
+        } else {
+          const searchResponse = await fetch("/api/vector-search", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              query,
-              imageUrls: generatedMemes
-                .map((meme) => meme.output)
-                .filter((url) => url),
-            }),
+            body: JSON.stringify({ query, page: 0 }),
           });
+
+          if (!searchResponse.ok) throw new Error("Vector search failed");
+          const { results, totalResults } = await searchResponse.json();
+
+          setMemes(results);
+          setTotalResults(totalResults);
+          setHasMore(results.length < totalResults);
+          setPage(0);
         }
-
-        const searchResponse = await fetch("/api/vector-search", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, page: 0 }),
-        });
-
-        if (!searchResponse.ok) throw new Error("Vector search failed");
-        const { results, totalResults } = await searchResponse.json();
-
-        setMemes(results);
-        setTotalResults(totalResults);
-        setHasMore(results.length < totalResults);
-        setPage(0);
       } catch (error) {
+        console.error("Search error:", error);
         alert("An error occurred while searching. Please try again.");
       } finally {
-        clearInterval(timer);
         setIsLoading(false);
-        setLoadingProgress(0);
+        setGenerationProgress(100);
       }
     }
   };
@@ -121,7 +152,7 @@ const Action = () => {
         setHasMore(false);
       }
     } catch (error) {
-      // Error handling can be added here if needed
+      console.error("Error loading more memes:", error);
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +187,7 @@ const Action = () => {
 
       window.parent.postMessage(postData, "*");
     } catch (error) {
-      // Error handling can be added here if needed
+      console.error("Error handling image click:", error);
     }
   };
 
@@ -166,7 +197,9 @@ const Action = () => {
       <div className={styles.searchBar}>
         <div
           className={`${styles.searchWrapper} ${
-            isFocused ? styles.searchWrapperFocused : styles.searchWrapperBlurred
+            isFocused
+              ? styles.searchWrapperFocused
+              : styles.searchWrapperBlurred
           }`}
         >
           <div className={styles.inputWrapper}>
@@ -195,27 +228,38 @@ const Action = () => {
           <div className={styles.loaderContainer}>
             <div
               className={styles.loaderBar}
-              style={{ width: `${loadingProgress}%` }}
+              style={{ width: `${generationProgress}%` }}
             ></div>
           </div>
         )}
       </div>
 
       <div className={styles.results}>
-        {memes.length > 0 ? (
+        {memes.length > 0 || Object.keys(errors).length > 0 ? (
           <div className={styles.imageGrid}>
-            {memes.map((meme, index) => (
+            {Array.from({ length: 22 }).map((_, index) => (
               <div
                 key={index}
                 className={styles.imageContainer}
-                onClick={() => handleImageClick(meme)}
+                onClick={() => memes[index] && handleImageClick(memes[index])}
               >
                 <div className={styles.imageWrapper}>
-                  <img
-                    src={meme.imageUrl}
-                    alt={`Generated image ${index + 1}`}
-                    className={styles.image}
-                  />
+                  {memes[index] ? (
+                    <img
+                      src={memes[index].imageUrl}
+                      alt={`Generated image ${index + 1}`}
+                      className={styles.image}
+                    />
+                  ) : errors[index] ? (
+                    <div className={styles.errorContainer}>
+                      <p>Error generating meme</p>
+                      <p className={styles.errorMessage}>{errors[index]}</p>
+                    </div>
+                  ) : (
+                    <div className={styles.placeholderContainer}>
+                      <div className={styles.placeholderSpinner}></div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -223,7 +267,7 @@ const Action = () => {
         ) : (
           <p className={styles.messageText}>
             {isLoading
-              ? "Loading can take between 5-25 seconds ✨"
+              ? "Generating memes, please wait..."
               : "Generate your memes on the search bar above 🌟"}
           </p>
         )}

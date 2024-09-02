@@ -183,6 +183,56 @@
   position: absolute;
 }
 
+/* Loading and progress styles */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.loadingSpinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.generationProgressContainer {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  height: 4px;
+  margin-bottom: 20px;
+}
+
+.generationProgressBar {
+  height: 100%;
+  background-image: linear-gradient(to right, #06b6d4, #3b82f6, #8b5cf6);
+  transition: width 0.5s ease-in-out;
+}
+
+.generationProgressText {
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 4px;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .container {
@@ -208,6 +258,19 @@
 
   .actionButton:hover {
     background-color: rgba(75, 85, 99, 1);
+  }
+
+  .loadingSpinner {
+    border-color: #4b5563;
+    border-top-color: #3b82f6;
+  }
+
+  .generationProgressContainer {
+    background-color: #374151;
+  }
+
+  .generationProgressText {
+    color: #9ca3af;
   }
 }
 

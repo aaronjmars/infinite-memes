@@ -40,78 +40,113 @@ const DownloadIcon = () => (
 
 export default function Results() {
   const router = useRouter();
-  const {
-    initialResults,
-    totalResults,
-    searchQuery,
-    similarityScore,
-    isNewlyGenerated,
-  } = router.query;
+  const { initialResults, searchQuery, similarityScore, isNewlyGenerated } =
+    router.query;
 
   const [memes, setMemes] = useState([]);
-  const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
   const [zoomedImage, setZoomedImage] = useState(null);
   const [isInIframe, setIsInIframe] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setIsInIframe(window.self !== window.top);
     if (initialResults) {
       const parsedResults = JSON.parse(initialResults);
       setMemes(parsedResults);
-      setHasMore(parsedResults.length < parseInt(totalResults));
-    }
-  }, [initialResults, totalResults, isNewlyGenerated]);
-
-  const loadMoreMemes = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      const nextPage = page + 1;
-      const response = await fetch("/api/vector-search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: searchQuery,
-          page: nextPage,
-        }),
-      });
-      const data = await response.json();
-
-      if (data.results.length > 0) {
-        setMemes((prevMemes) => {
-          const newMemes = [...prevMemes, ...data.results];
-          return newMemes;
-        });
-        setPage(nextPage);
-        setHasMore(
-          memes.length + data.results.length < parseInt(data.totalResults)
-        );
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Error loading more memes:", error);
-    } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, page, searchQuery, memes.length]);
+    if (isNewlyGenerated === "true" && searchQuery) {
+      generateMemes();
+    }
+  }, [initialResults, isNewlyGenerated, searchQuery]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100
-      ) {
-        loadMoreMemes();
+    let timer;
+    if (generating) {
+      const startTime = Date.now();
+      const duration = 30000; // 30 seconds
+
+      const updateProgress = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
+        setGenerationProgress(progress);
+
+        if (progress < 100) {
+          timer = requestAnimationFrame(updateProgress);
+        }
+      };
+
+      timer = requestAnimationFrame(updateProgress);
+    }
+
+    return () => {
+      if (timer) {
+        cancelAnimationFrame(timer);
       }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadMoreMemes]);
+  }, [generating]);
+
+  const generateMemes = useCallback(async () => {
+    setGenerating(true);
+    setErrors({});
+    try {
+      const response = await fetch("/api/meme-generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ searchQuery }),
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n").filter((line) => line.trim() !== "");
+
+        for (const line of lines) {
+          const data = JSON.parse(line);
+          if (data.error) {
+            console.error(`Error generating meme ${data.index}:`, data.error);
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              [data.index]: data.error,
+            }));
+          } else {
+            setMemes((prevMemes) => {
+              const newMemes = [...prevMemes];
+              newMemes[data.index] = { imageUrl: data.result.output, score: 1 };
+              return newMemes;
+            });
+
+            // Store the generated meme in vector store
+            await fetch("/api/vector-store", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                query: searchQuery,
+                imageUrls: [data.result.output],
+              }),
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Meme generation error:", error);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        general: "An error occurred during meme generation. Please try again.",
+      }));
+    } finally {
+      setGenerating(false);
+      setGenerationProgress(100);
+    }
+  }, [searchQuery]);
 
   const handleImageClick = (url) => {
     setZoomedImage(url);
@@ -168,58 +203,84 @@ export default function Results() {
         </div>
       )}
       <div className="container mx-auto px-4 py-8">
-        {memes.length > 0 ? (
-          <div
-            className={`${styles.imageGrid} ${
-              isInIframe ? styles.iframeImageGrid : ""
-            }`}
-          >
-            {memes.map((meme, index) => (
-              <div
-                key={index}
-                className={`${styles.imageContainer} ${
-                  isInIframe ? styles.iframeImageContainer : ""
-                }`}
-                onClick={() => handleImageClick(meme.imageUrl)}
-              >
-                <div className={styles.imageWrapper}>
-                  <img
-                    src={meme.imageUrl}
-                    alt={`Generated image ${index + 1}`}
-                    className={`${styles.image} ${
-                      isInIframe ? styles.iframeImage : ""
-                    }`}
-                  />
-                  <div className={styles.imageActions}>
-                    <button
-                      onClick={(e) => copyToClipboard(meme.imageUrl, e)}
-                      className={styles.actionButton}
-                      aria-label="Copy to clipboard"
-                    >
-                      <CopyIcon />
-                    </button>
-                    <button
-                      onClick={(e) => downloadImage(meme.imageUrl, e)}
-                      className={styles.actionButton}
-                      aria-label="Download image"
-                    >
-                      <DownloadIcon />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {loading ? (
+          <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner}></div>
+            <p>Loading initial results...</p>
           </div>
         ) : (
-          <p className="text-center text-gray-700 dark:text-gray-300">
-            No images generated. Please try again.
-          </p>
-        )}
-        {loading && <p className="text-center mt-4">Loading more memes...</p>}
-        {!hasMore && (
-          <p className="text-center mt-4">
-            You&#39;ve reached the end of the memes 🫡
-          </p>
+          <>
+            {generating && (
+              <div className={styles.generationProgressContainer}>
+                <div
+                  className={styles.generationProgressBar}
+                  style={{ width: `${generationProgress}%` }}
+                ></div>
+                <div className={styles.generationProgressText}>
+                  Generating memes: {Math.round(generationProgress)}%
+                </div>
+              </div>
+            )}
+            {errors.general && (
+              <p className="text-center text-red-500 mb-4">{errors.general}</p>
+            )}
+            {memes.length > 0 ? (
+              <div
+                className={`${styles.imageGrid} ${
+                  isInIframe ? styles.iframeImageGrid : ""
+                }`}
+              >
+                {memes.map((meme, index) => (
+                  <div
+                    key={index}
+                    className={`${styles.imageContainer} ${
+                      isInIframe ? styles.iframeImageContainer : ""
+                    }`}
+                  >
+                    {meme ? (
+                      <div
+                        className={styles.imageWrapper}
+                        onClick={() => handleImageClick(meme.imageUrl)}
+                      >
+                        <img
+                          src={meme.imageUrl}
+                          alt={`Generated image ${index + 1}`}
+                          className={`${styles.image} ${
+                            isInIframe ? styles.iframeImage : ""
+                          }`}
+                        />
+                        <div className={styles.imageActions}>
+                          <button
+                            onClick={(e) => copyToClipboard(meme.imageUrl, e)}
+                            className={styles.actionButton}
+                            aria-label="Copy to clipboard"
+                          >
+                            <CopyIcon />
+                          </button>
+                          <button
+                            onClick={(e) => downloadImage(meme.imageUrl, e)}
+                            className={styles.actionButton}
+                            aria-label="Download image"
+                          >
+                            <DownloadIcon />
+                          </button>
+                        </div>
+                      </div>
+                    ) : errors[index] ? (
+                      <div className={styles.errorContainer}>
+                        <p>Error generating meme</p>
+                        <p className={styles.errorMessage}>{errors[index]}</p>
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-700 dark:text-gray-300">
+                Generating images, please wait...
+              </p>
+            )}
+          </>
         )}
       </div>
 
