@@ -219,7 +219,7 @@ const Action = () => {
                 isLoading ? styles.buttonDisabled : styles.buttonEnabled
               }`}
               disabled={isLoading}
-              data-umami-event={ActionMemeGenerate}
+              data-umami-event="{ActionMemeGenerate}"
             >
               {isLoading ? "Generating..." : "Generate"}
             </button>
