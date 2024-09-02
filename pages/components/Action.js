@@ -34,6 +34,7 @@ const Action = () => {
   }, []);
 
   const handleSearch = async () => {
+    window.umami.track("ActionMemeGenerate");
     if (query.trim()) {
       setIsLoading(true);
       setGenerationProgress(0);
@@ -220,7 +221,6 @@ const Action = () => {
                 isLoading ? styles.buttonDisabled : styles.buttonEnabled
               }`}
               disabled={isLoading}
-              data-umami-event={"ActionMemeGenerate"}
             >
               {isLoading ? "Generating..." : "Generate"}
             </button>

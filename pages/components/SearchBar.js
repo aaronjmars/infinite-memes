@@ -9,8 +9,8 @@ export default function SearchBar() {
   const router = useRouter();
 
   const handleSearch = async () => {
+    window.umami.track("MemeGenerate");
     if (query.trim()) {
-      window.umami.track("MemeGenerate");
       setIsLoading(true);
       try {
         const checkResponse = await fetch("/api/vector-search", {
