@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.innerContainer}>
         <div className={styles.content}>
-          <span className={styles.text}>By</span>
+          <span className={styles.text}>by</span>
           <a
             href="https://merv.wtf"
             target="_blank"
@@ -15,7 +15,7 @@ const Footer = () => {
           >
             <img src="merv.png" alt="Merv logo" className={styles.smallLogo} />
           </a>
-          <span className={styles.text}>, powered by</span>
+          <span className={styles.text}>❀ powered by</span>
           <a
             href="https://glif.app"
             target="_blank"
