@@ -1,5 +1,5 @@
 import ids from "../imageGeneratorIDs.json";
-import { Readable } from 'stream';
+import { Readable } from "stream";
 
 export const config = {
   maxDuration: 60,
@@ -30,21 +30,21 @@ export default async function handler(req, res) {
 
   // Set up a streaming response
   res.writeHead(200, {
-    'Content-Type': 'application/octet-stream',
-    'Transfer-Encoding': 'chunked'
+    "Content-Type": "application/octet-stream",
+    "Transfer-Encoding": "chunked",
   });
 
   const stream = new Readable({
-    read() {}
+    read() {},
   });
 
   stream.pipe(res);
 
   const sendChunk = (data) => {
-    stream.push(JSON.stringify(data) + '\n');
+    stream.push(JSON.stringify(data) + "\n");
   };
 
-  const requests = ids.ids.slice(0, 25).map((id, index) => 
+  const requests = ids.ids.slice(0, 29).map((id, index) =>
     fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -55,22 +55,29 @@ export default async function handler(req, res) {
         id: id,
         inputs: [searchQuery],
       }),
-    }).then(async response => {
-      if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
-      }
-      return response.json();
-    }).then(result => {
-      if (!result || !result.output) {
-        throw new Error("Invalid response from meme generation API");
-      }
-      sendChunk({ index, result });
-      return result;
-    }).catch(error => {
-      console.error(`Error generating meme ${index}:`, error);
-      sendChunk({ index, error: error.message });
+      signal: AbortSignal.timeout(30000), // 30 second timeout
     })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorBody = await response.text();
+          throw new Error(
+            `API request failed with status ${response.status}: ${errorBody}`
+          );
+        }
+        return response.json();
+      })
+      .then((result) => {
+        console.log(`Response for meme ${index}:`, JSON.stringify(result));
+        if (!result || !result.output) {
+          throw new Error("Invalid response from meme generation API");
+        }
+        sendChunk({ index, result });
+        return result;
+      })
+      .catch((error) => {
+        console.error(`Error generating meme ${index}:`, error);
+        sendChunk({ index, error: error.message });
+      })
   );
 
   try {

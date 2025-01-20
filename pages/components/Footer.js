@@ -9,12 +9,12 @@ const Footer = () => {
           <span className={styles.text}>
             By{" "}
             <a
-              href="https://twitter.com/leo5imon"
+              href="https://merv.wtf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
             >
-              Leo Simon
+              MERV.WTF
             </a>
             , powered by
           </span>
