@@ -1,23 +1,18 @@
 .footer {
   @apply bg-gray-100 dark:bg-gray-800 py-4;
 }
-
 .innerContainer {
   @apply mx-auto px-4 max-w-7xl;
 }
-
 .content {
   @apply flex justify-center items-center;
 }
-
 .text {
   @apply text-sm text-gray-600 dark:text-gray-300 mr-2;
 }
-
 .link {
   @apply hover:underline text-gray-700 dark:text-gray-200;
 }
-
 .logo {
   @apply w-20 mr-1;
 }
