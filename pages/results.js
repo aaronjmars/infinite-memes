@@ -188,6 +188,12 @@ export default function Results() {
       console.error("Failed to download image: ", err);
     }
   };
+  
+  const shouldShowImage = (meme, index) => {
+    if (!meme) return false;
+    if (!errors[index]) return true;
+    return errors[index] !== "Invalid response from meme generation API";
+  };
 
   return (
     <div
@@ -230,50 +236,46 @@ export default function Results() {
                   isInIframe ? styles.iframeImageGrid : ""
                 }`}
               >
-                {memes.map((meme, index) => (
-                  <div
-                    key={index}
-                    className={`${styles.imageContainer} ${
-                      isInIframe ? styles.iframeImageContainer : ""
-                    }`}
-                  >
-                    {meme ? (
+                {memes.map(
+                  (meme, index) =>
+                    shouldShowImage(meme, index) && (
                       <div
-                        className={styles.imageWrapper}
-                        onClick={() => handleImageClick(meme.imageUrl)}
+                        key={index}
+                        className={`${styles.imageContainer} ${
+                          isInIframe ? styles.iframeImageContainer : ""
+                        }`}
                       >
-                        <img
-                          src={meme.imageUrl}
-                          alt={`Generated image ${index + 1}`}
-                          className={`${styles.image} ${
-                            isInIframe ? styles.iframeImage : ""
-                          }`}
-                        />
-                        <div className={styles.imageActions}>
-                          <button
-                            onClick={(e) => copyToClipboard(meme.imageUrl, e)}
-                            className={styles.actionButton}
-                            aria-label="Copy to clipboard"
-                          >
-                            <CopyIcon />
-                          </button>
-                          <button
-                            onClick={(e) => downloadImage(meme.imageUrl, e)}
-                            className={styles.actionButton}
-                            aria-label="Download image"
-                          >
-                            <DownloadIcon />
-                          </button>
+                        <div
+                          className={styles.imageWrapper}
+                          onClick={() => handleImageClick(meme.imageUrl)}
+                        >
+                          <img
+                            src={meme.imageUrl}
+                            alt={`Generated image ${index + 1}`}
+                            className={`${styles.image} ${
+                              isInIframe ? styles.iframeImage : ""
+                            }`}
+                          />
+                          <div className={styles.imageActions}>
+                            <button
+                              onClick={(e) => copyToClipboard(meme.imageUrl, e)}
+                              className={styles.actionButton}
+                              aria-label="Copy to clipboard"
+                            >
+                              <CopyIcon />
+                            </button>
+                            <button
+                              onClick={(e) => downloadImage(meme.imageUrl, e)}
+                              className={styles.actionButton}
+                              aria-label="Download image"
+                            >
+                              <DownloadIcon />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    ) : errors[index] ? (
-                      <div className={styles.errorContainer}>
-                        <p>Error generating meme</p>
-                        <p className={styles.errorMessage}>{errors[index]}</p>
-                      </div>
-                    ) : null}
-                  </div>
-                ))}
+                    )
+                )}
               </div>
             ) : (
               <p className="text-center text-gray-700 dark:text-gray-300">

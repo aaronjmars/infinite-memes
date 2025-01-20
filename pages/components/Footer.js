@@ -14,7 +14,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className={styles.link}
             >
-              MERV.WTF
+              <img src="merv.png" alt="Merv logo" className={styles.logo} />
             </a>
             , powered by
           </span>
