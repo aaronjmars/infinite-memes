@@ -1,18 +1,18 @@
 .footer {
-  @apply bg-gray-100 dark:bg-gray-800 py-4;
+  @apply bg-gray-100 dark:bg-gray-800 py-2;
 }
 .innerContainer {
   @apply mx-auto px-4 max-w-7xl;
 }
 .content {
-  @apply flex justify-center items-center;
+  @apply flex justify-center items-center gap-1;
 }
 .text {
-  @apply text-sm text-gray-600 dark:text-gray-300 mr-2;
+  @apply text-sm text-gray-600 dark:text-gray-300;
 }
 .link {
-  @apply hover:underline text-gray-700 dark:text-gray-200;
+  @apply hover:underline text-gray-700 dark:text-gray-200 flex items-center;
 }
-.logo {
-  @apply w-20 mr-1;
+.smallLogo {
+  @apply h-4 w-auto;
 }
