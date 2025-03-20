@@ -9,7 +9,6 @@ const glifApiToken = process.env.GLIF_API_KEY;
 const glifApiUrl = "https://simple-api.glif.app";
 
 const openai = new OpenAI({
-  project: "proj_JPKR0G1JsA6na4uUBzjlaLJ0",
   apiKey: process.env.OPENAI_API_KEY,
 });
 
