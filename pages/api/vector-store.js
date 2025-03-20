@@ -3,7 +3,6 @@ import OpenAI from "openai";
 
 let pinecone = null;
 const openai = new OpenAI({
-  project: "proj_JPKR0G1JsA6na4uUBzjlaLJ0",
   apiKey: process.env.OPENAI_API_KEY,
 });
 
