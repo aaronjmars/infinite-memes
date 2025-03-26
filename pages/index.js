@@ -39,26 +39,15 @@ export default function Home() {
           property="og:description"
           content="Generate infinite memes with AI"
         />
-        <meta
-          property="og:image"
-          content="https://infinitememes.lol/INFINITE-MEMES.png"
-        />
-        <meta name="twitter:card" content="player" />
+        <meta property="og:image" content="https://infinitememes.lol/OG.png" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@leo5imon" />
         <meta name="twitter:title" content="Infinite Memes Generator" />
         <meta
           name="twitter:description"
           content="Generate infinite memes with AI"
         />
-
-        <meta name="twitter:player" content="https://infinitememes.lol/" />
-
-        <meta name="twitter:player:width" content="360" />
-        <meta name="twitter:player:height" content="560" />
-        <meta
-          name="twitter:image"
-          content="https://infinitememes.lol/INFINITE-MEMES.png"
-        />
+        <meta name="twitter:image" content="https://infinitememes.lol/OG.png" />
         <meta property="og:url" content="https://infinitememes.lol/" />
       </Head>
       <Script
