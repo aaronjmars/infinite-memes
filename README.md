@@ -1,40 +1,107 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Infinite Memes Generator
+
+An AI-powered meme generator that creates memes from text prompts or Farcaster casts.
+
+## Features
+
+- **Search-based meme generation**: Enter any topic and get AI-generated memes using 29 different meme templates
+- **Farcaster integration**: Generate memes based on Farcaster cast content
+- **Smart caching**: Uses vector similarity search to avoid regenerating similar memes
+- **Streaming responses**: Memes load progressively as they're generated
+
+## How It Works
+
+1. **User enters a search query** (or pastes a Farcaster cast URL)
+2. **Vector search** checks if similar memes already exist in the database (using OpenAI embeddings + Pinecone)
+3. If similarity score is below threshold, **new memes are generated** via GLIF API
+4. Generated memes are **stored in the vector database** for future searches
+5. Results are displayed with infinite scroll pagination
+
+For Farcaster casts, GPT-4o-mini extracts a short meme topic from the cast content before generating.
+
+## Tech Stack
+
+- **Framework**: Next.js 14 + React 18
+- **Styling**: Tailwind CSS
+- **Meme Generation**: [GLIF API](https://glif.app)
+- **Vector Database**: [Pinecone](https://pinecone.io)
+- **Embeddings & AI**: [OpenAI](https://openai.com) (text-embedding-3-small, GPT-4o-mini)
+- **Farcaster API**: [Neynar](https://neynar.com)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone <repo-url>
+cd infinite-memes
+
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Copy the example env file and fill in your API keys:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+cp .env.example .env
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Required environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+| Variable | Description |
+|----------|-------------|
+| `GLIF_API_KEY` | API key from [GLIF](https://glif.app) for meme generation |
+| `OPENAI_API_KEY` | OpenAI API key for embeddings and chat completions |
+| `PINECONE_API_KEY` | Pinecone API key for vector storage/search |
+| `NEYNAR_API_KEY` | Neynar API key for Farcaster cast fetching |
 
-## Learn More
+### Running Locally
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Development server
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Production build
+npm run build
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) to use the app.
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+├── pages/
+│   ├── index.js          # Main search page
+│   ├── farcaster.js      # Farcaster meme generator
+│   ├── results.js        # Search results display
+│   ├── api/
+│   │   ├── meme-generate.js    # GLIF meme generation endpoint
+│   │   ├── vector-search.js    # Pinecone similarity search
+│   │   ├── vector-store.js     # Store new memes in Pinecone
+│   │   ├── fc-meme-generate.js # Farcaster-specific generation
+│   │   └── fetch-cast.js       # Fetch Farcaster cast via Neynar
+│   └── components/       # React components
+├── public/               # Static assets
+└── styles/               # Global styles
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deployment
+
+Deploy easily on [Vercel](https://vercel.com):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-repo/infinite-memes)
+
+Make sure to add all environment variables in your Vercel project settings.
+
+## License
+
+MIT
