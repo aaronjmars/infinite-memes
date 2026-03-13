@@ -8,6 +8,11 @@ const openai = new OpenAI({
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
+    const apiKey = req.headers["x-api-key"];
+    if (!process.env.VECTOR_STORE_API_KEY || apiKey !== process.env.VECTOR_STORE_API_KEY) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     try {
       const { query, imageUrls } = req.body;
 

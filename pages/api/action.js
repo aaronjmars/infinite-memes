@@ -1,8 +1,8 @@
 import validateFrameMessage from "./../utils/validateFrameMessage";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === "POST") {
-    if (!validateFrameMessage(req.body)) {
+    if (!(await validateFrameMessage(req.body))) {
       console.log("Invalid frame message");
       return res.status(400).json({ error: "Invalid frame message" });
     }
